@@ -1,0 +1,12 @@
+# Default GitHub (swapnilkapoor-ST) — optional, only if you still use it
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes
+# swapnilkapoor22 repos
+Host github.com-swapnilkapoor22
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_swapnilkapoor22
+  IdentitiesOnly yes

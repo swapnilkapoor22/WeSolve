@@ -1,0 +1,6 @@
+package com.wesolve.tickets.persistence;
+
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TicketRepository extends JpaRepository<TicketEntity, UUID> {}
