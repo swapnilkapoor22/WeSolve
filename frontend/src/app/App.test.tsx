@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { expect, test } from "vitest";
 import { App } from "./App";
 import { store } from "./store";
 

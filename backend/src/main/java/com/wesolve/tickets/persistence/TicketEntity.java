@@ -20,40 +20,49 @@ import org.hibernate.generator.EventType;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TicketEntity {
 
-    @Id
-    private UUID id;
+  @Id private UUID id;
 
-    @Generated(event = EventType.INSERT)
-    @Column(name = "ticket_number", insertable = false, updatable = false)
-    private Long ticketNumber;
+  @Generated(event = EventType.INSERT)
+  @Column(name = "ticket_number", insertable = false, updatable = false)
+  private Long ticketNumber;
 
-    @Column(nullable = false)
-    private String title;
+  @Column(nullable = false)
+  private String title;
 
-    @Column(nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @Column(nullable = false)
-    private String priority;
+  @Column(nullable = false)
+  private String priority;
 
-    @Column(nullable = false)
-    private String status;
+  @Column(nullable = false)
+  private String status;
 
-    @Column(name = "assignee_id", nullable = false)
-    private UUID assigneeId;
+  @Column(name = "assignee_id", nullable = false)
+  private UUID assigneeId;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
+  @Column(name = "created_at")
+  private Instant createdAt;
 
-    @Column(name = "created_by")
-    private String createdBy;
+  @Column(name = "created_by")
+  private String createdBy;
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 
-    @Column(name = "updated_by")
-    private String updatedBy;
+  @Column(name = "updated_by")
+  private String updatedBy;
 
-    @Column(name = "last_watermark")
-    private Long lastWatermark;
+  @Column(name = "last_watermark")
+  private Long lastWatermark;
+
+  public TicketEntity(
+      UUID id, String title, String description, String priority, String status, UUID assigneeId) {
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.priority = priority;
+    this.status = status;
+    this.assigneeId = assigneeId;
+  }
 }

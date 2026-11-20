@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface MemberDirectory {
 
-    Optional<Member> findAssignable(UUID id);
+  Optional<Member> findAssignable(UUID id);
 
-    Member requireBySignIn(String signInId);
+  Member requireBySignIn(String signInId);
 }

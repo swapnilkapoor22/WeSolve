@@ -21,45 +21,51 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TicketController {
 
-    private final CreateTicketService tickets;
-    private final MemberDirectory members;
+  private final CreateTicketService tickets;
+  private final MemberDirectory members;
 
-    public TicketController(CreateTicketService tickets, MemberDirectory members) {
-        this.tickets = tickets;
-        this.members = members;
-    }
+  public TicketController(CreateTicketService tickets, MemberDirectory members) {
+    this.tickets = tickets;
+    this.members = members;
+  }
 
-    @PostMapping("/api/v1/tickets")
-    @PreAuthorize("hasAuthority('TICKET_CREATE')")
-    public ResponseEntity<Map<String, Object>> create(
-            @Valid @RequestBody CreateTicketRequest request, JwtAuthenticationToken token) {
-        Member actor = members.requireBySignIn(token.getToken().getClaimAsString("preferred_username"));
-        TicketEntity ticket = tickets.create(
-                request.title(), request.description(), request.priority(), request.assigneeId(), actor.id());
-        Member assignee = members.findAssignable(ticket.getAssigneeId()).orElseThrow();
-        return ResponseEntity.created(URI.create("/api/v1/tickets/" + ticket.getTicketNumber()))
-                .body(Map.of(
-                        "number",
-                        ticket.getTicketNumber(),
-                        "title",
-                        ticket.getTitle(),
-                        "description",
-                        ticket.getDescription(),
-                        "priority",
-                        ticket.getPriority(),
-                        "status",
-                        ticket.getStatus(),
-                        "assignee",
-                        Map.of("id", assignee.id(), "displayName", assignee.displayName()),
-                        "createdAt",
-                        ticket.getCreatedAt(),
-                        "updatedAt",
-                        ticket.getUpdatedAt()));
-    }
+  @PostMapping("/api/v1/tickets")
+  @PreAuthorize("hasAuthority('TICKET_CREATE')")
+  public ResponseEntity<Map<String, Object>> create(
+      @Valid @RequestBody CreateTicketRequest request, JwtAuthenticationToken token) {
+    Member actor = members.requireBySignIn(token.getToken().getClaimAsString("preferred_username"));
+    TicketEntity ticket =
+        tickets.create(
+            request.title(),
+            request.description(),
+            request.priority(),
+            request.assigneeId(),
+            actor.id());
+    Member assignee = members.findAssignable(ticket.getAssigneeId()).orElseThrow();
+    return ResponseEntity.created(URI.create("/api/v1/tickets/" + ticket.getTicketNumber()))
+        .body(
+            Map.of(
+                "number",
+                ticket.getTicketNumber(),
+                "title",
+                ticket.getTitle(),
+                "description",
+                ticket.getDescription(),
+                "priority",
+                ticket.getPriority(),
+                "status",
+                ticket.getStatus(),
+                "assignee",
+                Map.of("id", assignee.id(), "displayName", assignee.displayName()),
+                "createdAt",
+                ticket.getCreatedAt(),
+                "updatedAt",
+                ticket.getUpdatedAt()));
+  }
 
-    public record CreateTicketRequest(
-            @NotBlank @Size(max = 150) String title,
-            @NotBlank @Size(max = 5000) String description,
-            @NotNull @Pattern(regexp = "LOW|MEDIUM|HIGH|URGENT") String priority,
-            @NotNull UUID assigneeId) {}
+  public record CreateTicketRequest(
+      @NotBlank @Size(max = 150) String title,
+      @NotBlank @Size(max = 5000) String description,
+      @NotNull @Pattern(regexp = "LOW|MEDIUM|HIGH|URGENT") String priority,
+      @NotNull UUID assigneeId) {}
 }

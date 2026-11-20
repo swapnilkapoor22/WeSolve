@@ -8,16 +8,16 @@ import java.util.Locale;
 
 public final class SignInHash {
 
-    private SignInHash() {}
+  private SignInHash() {}
 
-    public static String of(String signInId) {
-        String normalized = signInId.trim().toLowerCase(Locale.ROOT);
-        try {
-            byte[] digest =
-                    MessageDigest.getInstance("SHA-256").digest(normalized.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest);
-        } catch (NoSuchAlgorithmException ex) {
-            throw new IllegalStateException("SHA-256 is unavailable", ex);
-        }
+  public static String of(String signInId) {
+    String normalized = signInId.trim().toLowerCase(Locale.ROOT);
+    try {
+      byte[] digest =
+          MessageDigest.getInstance("SHA-256").digest(normalized.getBytes(StandardCharsets.UTF_8));
+      return HexFormat.of().formatHex(digest);
+    } catch (NoSuchAlgorithmException ex) {
+      throw new IllegalStateException("SHA-256 is unavailable", ex);
     }
+  }
 }

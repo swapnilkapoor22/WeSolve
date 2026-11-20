@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SupportMemberRepository extends JpaRepository<SupportMemberEntity, UUID> {
 
-    Optional<SupportMemberEntity> findByHashKey(String hashKey);
+  Optional<SupportMemberEntity> findByHashKey(String hashKey);
 
-    Optional<SupportMemberEntity> findByIdAndAssignableTrue(UUID id);
+  Optional<SupportMemberEntity> findByIdAndAssignableTrue(UUID id);
 }

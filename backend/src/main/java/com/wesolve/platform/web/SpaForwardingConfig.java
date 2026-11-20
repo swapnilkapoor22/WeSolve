@@ -14,16 +14,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class SpaForwardingConfig extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-        String uri = request.getRequestURI();
-        boolean file = uri.contains(".");
-        boolean api = uri.startsWith("/api/") || uri.startsWith("/actuator");
-        if ("GET".equals(request.getMethod()) && !file && !api) {
-            request.getRequestDispatcher("/index.html").forward(request, response);
-            return;
-        }
-        chain.doFilter(request, response);
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+      throws ServletException, IOException {
+    String uri = request.getRequestURI();
+    boolean file = uri.contains(".");
+    boolean api = uri.startsWith("/api/") || uri.startsWith("/actuator");
+    if ("GET".equals(request.getMethod()) && !file && !api) {
+      request.getRequestDispatcher("/index.html").forward(request, response);
+      return;
     }
+    chain.doFilter(request, response);
+  }
 }

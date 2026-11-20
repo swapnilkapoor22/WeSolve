@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActionAuthorityService {
 
-    private final JdbcTemplate jdbc;
+  private final JdbcTemplate jdbc;
 
-    public ActionAuthorityService(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
+  public ActionAuthorityService(JdbcTemplate jdbc) {
+    this.jdbc = jdbc;
+  }
 
-    public List<String> actionsForSignIn(String signInId) {
-        return jdbc.query(
-                """
+  public List<String> actionsForSignIn(String signInId) {
+    return jdbc.query(
+        """
                 SELECT DISTINCT ra.access_code
                 FROM users u
                 JOIN user_group ug ON ug.user_hash_key = u.hash_key
@@ -26,7 +26,7 @@ public class ActionAuthorityService {
                 WHERE u.hash_key = ? AND u.active
                 ORDER BY ra.access_code
                 """,
-                (rs, row) -> rs.getString(1),
-                SignInHash.of(signInId));
-    }
+        (rs, row) -> rs.getString(1),
+        SignInHash.of(signInId));
+  }
 }

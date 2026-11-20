@@ -18,39 +18,55 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
 
-    @Id
-    private UUID id;
+  @Id private UUID id;
 
-    @Column(name = "hash_key", nullable = false, updatable = false)
-    private String hashKey;
+  @Column(name = "hash_key", nullable = false, updatable = false)
+  private String hashKey;
 
-    @Column(name = "sign_in_id", nullable = false, updatable = false)
-    private String signInId;
+  @Column(name = "sign_in_id", nullable = false, updatable = false)
+  private String signInId;
 
-    @Column(name = "display_name", nullable = false)
-    private String displayName;
+  @Column(name = "display_name", nullable = false)
+  private String displayName;
 
-    @Column(nullable = false)
-    private String email;
+  @Column(nullable = false)
+  private String email;
 
-    @Column(nullable = false)
-    private boolean active;
+  @Column(nullable = false)
+  private boolean active;
 
-    @Column(name = "can_be_assigned", nullable = false)
-    private boolean canBeAssigned;
+  @Column(name = "can_be_assigned", nullable = false)
+  private boolean canBeAssigned;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
+  @Column(name = "created_at")
+  private Instant createdAt;
 
-    @Column(name = "created_by")
-    private String createdBy;
+  @Column(name = "created_by")
+  private String createdBy;
 
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+  @Column(name = "updated_at")
+  private Instant updatedAt;
 
-    @Column(name = "updated_by")
-    private String updatedBy;
+  @Column(name = "updated_by")
+  private String updatedBy;
 
-    @Column(name = "last_watermark")
-    private Long lastWatermark;
+  @Column(name = "last_watermark")
+  private Long lastWatermark;
+
+  public UserEntity(
+      UUID id,
+      String hashKey,
+      String signInId,
+      String displayName,
+      String email,
+      boolean active,
+      boolean canBeAssigned) {
+    this.id = id;
+    this.hashKey = hashKey;
+    this.signInId = signInId;
+    this.displayName = displayName;
+    this.email = email;
+    this.active = active;
+    this.canBeAssigned = canBeAssigned;
+  }
 }

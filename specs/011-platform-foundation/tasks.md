@@ -53,14 +53,14 @@ US3 comes before ticket screens because spec 011 sends a successful sign-in to t
 
 **Purpose**: Empty build for both sides. No behavior yet.
 
-- [ ] T001 Create the Gradle Kotlin DSL build in `backend/settings.gradle.kts`, `backend/build.gradle.kts`, and `backend/gradle/libs.versions.toml` for Java 21, Spring Boot 3.5.x, Spring AI 1.1.x, Flyway, PostgreSQL, Lombok, Micrometer tracing OTLP, and Resilience4j, with versions pinned and `backend/gradle.lockfile` committed
-- [ ] T002 [P] Create the Vite React TypeScript app in `frontend/package.json`, `frontend/tsconfig.json` (`strict: true`), and `frontend/vite.config.ts`, with React, Redux Toolkit, React Router, and `oidc-client-ts`
-- [ ] T003 [P] Add Spotless and SpotBugs to `backend/build.gradle.kts`, and ESLint, Prettier, and `tsc --noEmit` scripts to `frontend/package.json`
+- [X] T001 Create the Gradle Kotlin DSL build in `backend/settings.gradle.kts`, `backend/build.gradle.kts`, and `backend/gradle/libs.versions.toml` for Java 21, Spring Boot 3.5.x, Spring AI 1.1.x, Flyway, PostgreSQL, Lombok, Micrometer tracing OTLP, and Resilience4j, with versions pinned and `backend/gradle.lockfile` committed
+- [X] T002 [P] Create the Vite React TypeScript app in `frontend/package.json`, `frontend/tsconfig.json` (`strict: true`), and `frontend/vite.config.ts`, with React, Redux Toolkit, React Router, and `oidc-client-ts`
+- [X] T003 [P] Add Spotless and SpotBugs to `backend/build.gradle.kts`, and ESLint, Prettier, and `tsc --noEmit` scripts to `frontend/package.json`
 - [ ] T004 [P] Add JaCoCo gates of 80% line and 70% branch to `backend/build.gradle.kts`
-- [ ] T005 [P] Add `.env.example` with names only for `POSTGRES_PASSWORD`, `BOOTSTRAP_ADMIN_SIGN_IN_ID`, `OIDC_ISSUER_URI`, `OIDC_CLIENT_ID`, and `OPENAI_API_KEY`, and ignore `.env` in `.gitignore`
-- [ ] T006 Copy `specs/011-platform-foundation/contracts/openapi.yaml` to `api/openapi.yaml` unchanged
-- [ ] T007 Create `backend/src/main/java/com/wesolve/WeSolveApplication.java` and empty `api` packages under `platform`, `access`, `tickets`, and `assistant`
-- [ ] T008 [P] Create `frontend/src/app/`, `frontend/src/api/`, `frontend/src/telemetry/`, and `frontend/src/features/{auth,dashboard,tickets,assistant,users,access}/`
+- [X] T005 [P] Add `.env.example` with names only for `POSTGRES_PASSWORD`, `BOOTSTRAP_ADMIN_SIGN_IN_ID`, `OIDC_ISSUER_URI`, `OIDC_CLIENT_ID`, and `OPENAI_API_KEY`, and ignore `.env` in `.gitignore`
+- [X] T006 Copy `specs/011-platform-foundation/contracts/openapi.yaml` to `api/openapi.yaml` unchanged
+- [X] T007 Create `backend/src/main/java/com/wesolve/WeSolveApplication.java` and empty `api` packages under `platform`, `access`, `tickets`, and `assistant`
+- [X] T008 [P] Create `frontend/src/app/`, `frontend/src/api/`, `frontend/src/telemetry/`, and `frontend/src/features/{auth,dashboard,tickets,assistant,users,access}/`
 
 ---
 
@@ -70,15 +70,15 @@ US3 comes before ticket screens because spec 011 sends a successful sign-in to t
 
 **CRITICAL**: Finish this phase before any user story.
 
-- [ ] T009 Write `backend/src/test/java/com/wesolve/architecture/ModuleBoundaryTest.java` so `assistant` depends only on `tickets`, `tickets` only on `access`, `access` only on `platform`, and only through each module's `api` package
-- [ ] T010 [P] Add RFC 9457 handling in `backend/src/main/java/com/wesolve/platform/web/ApiExceptionHandler.java` with `code` and `traceId` for `VALIDATION_FAILED`, `NOT_FOUND`, `NO_ACCESS`, `FORBIDDEN`, `STATUS_CHANGE_NOT_ALLOWED`, `COMMENT_REQUIRED`, `LAST_ADMIN`, `DUPLICATE`, `IDEMPOTENCY_CONFLICT`, and `ASSISTANT_UNAVAILABLE`
-- [ ] T011 [P] Set `spring.threads.virtual.enabled=true`, `spring.jpa.hibernate.ddl-auto=validate`, `spring.jpa.open-in-view=false`, application port 8080, management port 8081, and JSON logs in `backend/src/main/resources/application.yml`
-- [ ] T012 [P] Add the JWT resource-server filter in `backend/src/main/java/com/wesolve/platform/security/SecurityConfig.java`, permitting only `GET /api/v1/public-config` and denying every other `/api/**` path until a later story opens it
-- [ ] T013 [P] Add the Redux store and router shell in `frontend/src/app/store.ts` and `frontend/src/app/router.tsx`, with a route-level error boundary in `frontend/src/app/App.tsx`
+- [X] T009 Write `backend/src/test/java/com/wesolve/architecture/ModuleBoundaryTest.java` so `assistant` depends only on `tickets`, `tickets` only on `access`, `access` only on `platform`, and only through each module's `api` package
+- [X] T010 [P] Add RFC 9457 handling in `backend/src/main/java/com/wesolve/platform/web/ApiExceptionHandler.java` with `code` and `traceId` for `VALIDATION_FAILED`, `NOT_FOUND`, `NO_ACCESS`, `FORBIDDEN`, `STATUS_CHANGE_NOT_ALLOWED`, `COMMENT_REQUIRED`, `LAST_ADMIN`, `DUPLICATE`, `IDEMPOTENCY_CONFLICT`, and `ASSISTANT_UNAVAILABLE`
+- [X] T011 [P] Set `spring.threads.virtual.enabled=true`, `spring.jpa.hibernate.ddl-auto=validate`, `spring.jpa.open-in-view=false`, application port 8080, management port 8081, and JSON logs in `backend/src/main/resources/application.yml`
+- [X] T012 [P] Add the JWT resource-server filter in `backend/src/main/java/com/wesolve/platform/security/SecurityConfig.java`, permitting only `GET /api/v1/public-config` and denying every other `/api/**` path until a later story opens it
+- [X] T013 [P] Add the Redux store and router shell in `frontend/src/app/store.ts` and `frontend/src/app/router.tsx`, with a route-level error boundary in `frontend/src/app/App.tsx`
 - [ ] T014 [P] Add Micrometer tracing OTLP export in `backend/src/main/resources/application.yml` and `traceparent` injection in `frontend/src/telemetry/tracing.ts`
-- [ ] T015 [P] Add the Testcontainers base `backend/src/test/java/com/wesolve/support/PostgresIntegrationTest.java` using `pgvector/pgvector:pg17`
+- [X] T015 [P] Add the Testcontainers base `backend/src/test/java/com/wesolve/support/PostgresIntegrationTest.java` using `pgvector/pgvector:pg17`
 - [ ] T016 [P] Add the MSW server in `frontend/src/test/msw.ts` and generate the RTK Query client from `api/openapi.yaml` into `frontend/src/api/generated.ts` without hand-editing it
-- [ ] T017 Add `backend/src/main/java/com/wesolve/platform/audit/ActorContext.java` to set `app.actor` with `set_config(..., true)` at transaction start
+- [X] T017 Add `backend/src/main/java/com/wesolve/platform/audit/ActorContext.java` to set `app.actor` with `set_config(..., true)` at transaction start
 
 **Checkpoint**: The build, boundaries, errors, and sign-in gate exist. No business data yet.
 
@@ -93,7 +93,7 @@ US3 comes before ticket screens because spec 011 sends a successful sign-in to t
 ### Tests for User Story 1
 
 - [ ] T018 [P] [US1] Write a failing migration test in `backend/src/test/java/com/wesolve/platform/SchemaBootstrapIT.java`: empty database gains every table from `data-model.md`; applying migrations twice keeps one seed row per access code
-- [ ] T019 [P] [US1] Write a failing startup test in `backend/src/test/java/com/wesolve/platform/MissingSecretIT.java`: a missing `POSTGRES_PASSWORD` names that setting and does not print a secret value
+- [X] T019 [P] [US1] Write a failing startup test in `backend/src/test/java/com/wesolve/platform/MissingSecretIT.java`: a missing `POSTGRES_PASSWORD` names that setting and does not print a secret value
 
 ### Implementation for User Story 1
 
