@@ -1,0 +1,16 @@
+.git
+.gradle
+**/build
+**/node_modules
+**/dist
+frontend/coverage
+**/.env
+**/.env.*
+!**/.env.example
+coverage
+*.log
+.idea
+.vscode
+.DS_Store
+Dockerfile*
+.dockerignore

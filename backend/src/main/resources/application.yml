@@ -1,0 +1,60 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/wesolve}
+    username: ${SPRING_DATASOURCE_USERNAME:wesolve}
+    password: ${POSTGRES_PASSWORD:}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8082/realms/wesolve}
+  ai:
+    model:
+      chat: none
+      embedding: none
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+        dimensions: 1536
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+
+logging:
+  structured:
+    format:
+      console: logstash
+
+app:
+  security:
+    signin-claim: preferred_username
+  bootstrap:
+    admin-sign-in-id: ${BOOTSTRAP_ADMIN_SIGN_IN_ID:}
+  public:
+    issuer: ${OIDC_ISSUER_URI:http://localhost:8082/realms/wesolve}
+    client-id: ${OIDC_CLIENT_ID:wesolve}
+  assistant:
+    enabled: false

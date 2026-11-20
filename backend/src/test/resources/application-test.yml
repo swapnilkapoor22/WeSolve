@@ -1,0 +1,15 @@
+spring:
+  ai:
+    model:
+      chat: none
+      embedding: none
+    vectorstore:
+      pgvector:
+        initialize-schema: false
+
+app:
+  bootstrap:
+    admin-sign-in-id: admin
+  public:
+    issuer: http://localhost:8082/realms/wesolve
+    client-id: wesolve
