@@ -3,10 +3,11 @@ package com.wesolve.platform.security;
 import com.wesolve.platform.api.ApiException;
 import com.wesolve.platform.api.RequestGate;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -84,18 +85,9 @@ public class SecurityConfig {
   }
 
   @Bean
+  @Profile("!test")
   org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder(
-      org.springframework.core.env.Environment environment) {
-    if (List.of(environment.getActiveProfiles()).contains("test")) {
-      return token ->
-          org.springframework.security.oauth2.jwt.Jwt.withTokenValue(token)
-              .header("alg", "none")
-              .claim("preferred_username", "admin")
-              .claim("email", "admin@example.com")
-              .claim("email_verified", true)
-              .build();
-    }
-    String issuer = environment.getProperty("spring.security.oauth2.resourceserver.jwt.issuer-uri");
+      @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer) {
     return org.springframework.security.oauth2.jwt.JwtDecoders.fromIssuerLocation(issuer);
   }
 }

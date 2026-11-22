@@ -92,7 +92,7 @@ US3 comes before ticket screens because spec 011 sends a successful sign-in to t
 
 ### Tests for User Story 1
 
-- [ ] T018 [P] [US1] Write a failing migration test in `backend/src/test/java/com/wesolve/platform/SchemaBootstrapIT.java`: empty database gains every table from `data-model.md`; applying migrations twice keeps one seed row per access code
+- [X] T018 [P] [US1] Write a failing migration test in `backend/src/test/java/com/wesolve/platform/SchemaBootstrapIT.java`: empty database gains every table from `data-model.md`; applying migrations twice keeps one seed row per access code
 - [X] T019 [P] [US1] Write a failing startup test in `backend/src/test/java/com/wesolve/platform/MissingSecretIT.java`: a missing `POSTGRES_PASSWORD` names that setting and does not print a secret value
 
 ### Implementation for User Story 1

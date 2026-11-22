@@ -9,13 +9,15 @@ import org.springframework.core.env.StandardEnvironment;
 
 class MissingSecretIT {
 
-    @Test
-    void namesTheMissingSettingAndNotItsValue() {
-        StandardEnvironment environment = new StandardEnvironment();
-        assertThatThrownBy(() ->
-                        new RequiredSettingsEnvironment().postProcessEnvironment(environment, new SpringApplication()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("POSTGRES_PASSWORD")
-                .hasMessageNotContaining("super-secret");
-    }
+  @Test
+  void namesTheMissingSettingAndNotItsValue() {
+    StandardEnvironment environment = new StandardEnvironment();
+    assertThatThrownBy(
+            () ->
+                new RequiredSettingsEnvironment()
+                    .postProcessEnvironment(environment, new SpringApplication()))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("POSTGRES_PASSWORD")
+        .hasMessageNotContaining("super-secret");
+  }
 }

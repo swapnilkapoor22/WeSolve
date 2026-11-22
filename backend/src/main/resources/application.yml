@@ -3,6 +3,10 @@ server:
   shutdown: graceful
 
 spring:
+  autoconfigure:
+    # The pgvector store needs an EmbeddingModel, which stays off until the assistant
+    # (spec 007, tasks T085-T091) is built. Remove this exclusion when that work lands.
+    exclude: org.springframework.ai.vectorstore.pgvector.autoconfigure.PgVectorStoreAutoConfiguration
   threads:
     virtual:
       enabled: true
@@ -25,6 +29,11 @@ spring:
     model:
       chat: none
       embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
     vectorstore:
       pgvector:
         initialize-schema: false

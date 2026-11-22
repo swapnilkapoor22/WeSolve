@@ -1,29 +1,34 @@
 package com.wesolve.platform.web;
 
 import com.wesolve.platform.api.ApiException;
-import io.micrometer.tracing.Tracer;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-  private final Tracer tracer;
+  private static final String INVALID = "The request is invalid.";
 
-  public ApiExceptionHandler(Tracer tracer) {
-    this.tracer = tracer;
+  private final ProblemWriter problems;
+
+  public ApiExceptionHandler(ProblemWriter problems) {
+    this.problems = problems;
   }
 
   @ExceptionHandler(ApiException.class)
   public ResponseEntity<ProblemDetail> api(ApiException ex) {
-    return ResponseEntity.status(ex.status())
-        .body(problem(ex.status(), ex.code(), ex.getMessage(), List.of()));
+    return respond(ex.status(), ex.code(), ex.getMessage(), List.of());
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -38,26 +43,46 @@ public class ApiExceptionHandler {
                         "message",
                         String.valueOf(error.getDefaultMessage())))
             .toList();
-    ProblemDetail body = problem(400, "VALIDATION_FAILED", "The request is invalid.", errors);
-    return ResponseEntity.badRequest().body(body);
+    return respond(400, "VALIDATION_FAILED", INVALID, errors);
   }
 
-  private ProblemDetail problem(
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ProblemDetail> constraint(ConstraintViolationException ex) {
+    List<Map<String, String>> errors =
+        ex.getConstraintViolations().stream()
+            .map(
+                violation -> {
+                  String path = violation.getPropertyPath().toString();
+                  String field = path.substring(path.lastIndexOf('.') + 1);
+                  return Map.of("field", field, "message", violation.getMessage());
+                })
+            .toList();
+    return respond(400, "VALIDATION_FAILED", INVALID, errors);
+  }
+
+  @ExceptionHandler({
+    HttpMessageNotReadableException.class,
+    MethodArgumentTypeMismatchException.class,
+    MissingServletRequestParameterException.class
+  })
+  public ResponseEntity<ProblemDetail> unreadable(Exception ex) {
+    return respond(400, "VALIDATION_FAILED", INVALID, List.of());
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ProblemDetail> denied(AccessDeniedException ex) {
+    return respond(403, "FORBIDDEN", "You do not hold the required action.", List.of());
+  }
+
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<ProblemDetail> missing(NoResourceFoundException ex) {
+    return respond(404, "NOT_FOUND", "Not found.", List.of());
+  }
+
+  private ResponseEntity<ProblemDetail> respond(
       int status, String code, String detail, List<Map<String, String>> errors) {
-    ProblemDetail body = ProblemDetail.forStatusAndDetail(HttpStatus.valueOf(status), detail);
-    body.setTitle(HttpStatus.valueOf(status).getReasonPhrase());
-    body.setProperty("code", code);
-    body.setProperty("traceId", traceId());
-    if (!errors.isEmpty()) {
-      body.setProperty("errors", errors);
-    }
-    return body;
-  }
-
-  private String traceId() {
-    if (tracer.currentSpan() == null) {
-      return "none";
-    }
-    return tracer.currentSpan().context().traceId();
+    return ResponseEntity.status(status)
+        .contentType(org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON)
+        .body(problems.build(status, code, detail, errors));
   }
 }
